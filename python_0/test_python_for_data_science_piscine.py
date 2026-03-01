@@ -101,5 +101,65 @@ class TestEx01(unittest.TestCase):
         self.assertEqual(len(date_parts[2]), 4)
         self.assertTrue(date_parts[2].isdigit())
 
+# class TestEx02(unittest.TestCase):
+    
+class TestEx04(unittest.TestCase):
+    def test_ex04_is_even(self):
+        result = subprocess.run(['python3', 'ex04/whatis.py', '14'], 
+                                capture_output=True, text=True)
+
+        # Check that the script ran successfully
+        self.assertEqual(result.returncode, 0)
+
+        lines = result.stdout.strip().split('\n')
+
+        # Test if we have 1 line
+        self.assertEqual(len(lines), 1)
+
+        # Test if the result matches the expected
+        self.assertEqual(lines[0], "I'm Even")
+
+    def test_ex04_is_odd(self):
+        result = subprocess.run(['python3', 'ex04/whatis.py', '-5'], 
+                                capture_output=True, text=True)
+
+        # Check that the script ran successfully
+        self.assertEqual(result.returncode, 0)
+
+        lines = result.stdout.strip().split('\n')
+
+        # Test if we have 1 line
+        self.assertEqual(len(lines), 1)
+
+        # Test if the result matches the expected
+        self.assertEqual(lines[0], "I'm Odd.")
+
+    def test_ex04_without_params(self):
+        result = subprocess.run(['python3', 'ex04/whatis.py'], 
+                                capture_output=True, text=True)
+
+        # Check that the script ran successfully
+        self.assertEqual(result.returncode, 0)
+
+        lines = result.stdout.strip().split('\n')
+
+        # Test if we have 0 line
+        self.assertEqual(len(lines), 0)
+
+    def test_ex04_is_odd(self):
+        result = subprocess.run(['python3', 'ex04/whatis.py', '-5'], 
+                                capture_output=True, text=True)
+
+        # Check that the script ran successfully
+        self.assertEqual(result.returncode, 0)
+
+        lines = result.stdout.strip().split('\n')
+
+        # Test if we have 1 line
+        self.assertEqual(len(lines), 1)
+
+        # Test if the result matches the expected
+        self.assertEqual(lines[0], "I'm Odd.")
+
 if __name__ == '__main__':
     unittest.main()
