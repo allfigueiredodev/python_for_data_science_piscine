@@ -20,4 +20,6 @@ def ft_filter(function, iterable):
         ['Hello', 'World']
     """
 
+    # __DOC__ tem que ser a copia do __doc__ do filter original
+
     return [item for item in iterable if function(item)]
