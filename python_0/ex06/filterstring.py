@@ -1,10 +1,11 @@
 import sys
 from ft_filter import ft_filter
 
+
 def main(args):
     if len(args) != 3:
         raise AssertionError("the arguments are bad")
-    
+
     try:
         string = str(args[1])
         number = int(args[2])

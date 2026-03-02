@@ -3,22 +3,14 @@ ft_tuple = ("Hello", "toto!")
 ft_set = {"Hello", "tutu!"}
 ft_dict = {"Hello" : "titi!"}
 
-# change list
 ft_list[1] = "World!"
 
-#change tuple
-# temp_list = list(ft_tuple)
-# temp_list[1] = "Brazil!"
-# ft_tuple = tuple(temp_list)
 ft_tuple = ft_tuple[:1] + ("Brazil!",)
 
-#change set
 new_value = {"Hello", "São Paulo!"}
 ft_set.clear()
 ft_set.update(new_value)
-# ft_set = sorted(ft_set)
 
-#change dict
 ft_dict.update(Hello="42SãoPaulo!")
 
 print(ft_list)

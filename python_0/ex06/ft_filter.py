@@ -12,10 +12,12 @@ def ft_filter(function, iterable):
                              whose items will be evaluated.
 
     Returns:
-        list: A new list containing only the items where function(item) is True.
+        list: A new list containing only the items where function(item)
+        is True.
 
     Example:
         >>> ft_filter(lambda word: len(word) > 4, ["Hello", "the", "World"])
         ['Hello', 'World']
     """
+
     return [item for item in iterable if function(item)]
