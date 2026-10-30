@@ -32,10 +32,7 @@ def slice_me(family: list, start: int, end: int) -> list:
                 if not _is_number(value):
                     raise AssertionError("values must be int or float")
 
-        # The space before ":" is part of the expected sentence.
         print(f"My shape is : ({len(family)}, {width})")
-        # row[:] copies the inner list, so the caller can edit
-        # the result without changing the original table.
         sliced = [row[:] for row in family[start:end]]
         new_width = len(sliced[0]) if sliced else 0
         print(f"My new shape is : ({len(sliced)}, {new_width})")

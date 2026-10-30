@@ -16,9 +16,7 @@ def ft_load(path: str) -> np.ndarray:
         is_jpeg = lower_path.endswith(".jpg") or lower_path.endswith(".jpeg")
         if not is_jpeg:
             raise AssertionError("only JPG and JPEG files are supported")
-        # "with" closes the file even if something fails inside the block.
         with Image.open(path) as image:
-            # convert("RGB") forces 3 channels, even for a grey file.
             pixels = np.array(image.convert("RGB"))
         print(f"The shape of image is: {pixels.shape}")
         return pixels

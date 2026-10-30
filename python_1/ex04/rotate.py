@@ -1,27 +1,19 @@
+import io
+
 import numpy as np
 import matplotlib.pyplot as plt
+from PIL import Image
 
 from load_image import ft_load
-
-
-def cut_square(image: np.ndarray) -> np.ndarray:
-    """Return a 400x400 grey square around the raccoon's face.
-
-    Same window as in zoom.py, so the two exercises show the same crop.
-    The result keeps one channel: shape (400, 400, 1).
-    """
-    square = image[100:500, 550:950]
-    return square[:, :, :1]
 
 
 def transpose_image(image: np.ndarray) -> np.ndarray:
     """Swap rows and columns with two loops.
 
-    The subject forbids a library transpose (no .T, no np.transpose).
     The rule is: new[column][row] = old[row][column].
     After the swap, what used to be a column is a row.
+    A library transpose (.T or np.transpose) is not used.
     """
-    # Read the single channel as a plain 2D table of numbers.
     if image.ndim == 3:
         table = image[:, :, 0]
     else:
@@ -31,29 +23,73 @@ def transpose_image(image: np.ndarray) -> np.ndarray:
     for column in range(width):
         new_row = []
         for row in range(height):
-            # int() so the printed values stay whole numbers.
             new_row.append(int(table[row][column]))
         turned.append(new_row)
     return np.array(turned)
 
 
-def main() -> None:
-    """Load the animal, cut a square, transpose it, and display it."""
+def rotate(
+    path: str,
+    start_y: int,
+    start_x: int,
+    height: int,
+    width: int,
+    channel: int,
+) -> None:
+    """Crop a rectangle, transpose it, and display the result.
+
+    start_y / start_x: top-left corner of the crop.
+    height / width: size of the crop in pixels.
+    channel: which color to keep (0 = red, 1 = green, 2 = blue).
+    """
     try:
-        image = ft_load("animal.jpeg")
+        if not isinstance(path, str):
+            raise AssertionError("path must be a string")
+        for name, value in (
+            ("start_y", start_y),
+            ("start_x", start_x),
+            ("height", height),
+            ("width", width),
+            ("channel", channel),
+        ):
+            if isinstance(value, bool) or not isinstance(value, int):
+                raise AssertionError(f"{name} must be an int")
+        if height <= 0 or width <= 0:
+            raise AssertionError("height and width must be greater than 0")
+        if channel < 0 or channel > 2:
+            raise AssertionError("channel must be 0, 1 or 2")
+
+        image = ft_load(path)
         if image is None:
             return
-        square = cut_square(image)
-        print(f"The shape of image is: {square.shape}")
+
+        end_y = start_y + height
+        end_x = start_x + width
+        if start_y < 0 or start_x < 0 or end_y > image.shape[0] or end_x > image.shape[1]:
+            raise AssertionError("crop window is outside the image")
+
+        square = image[start_y:end_y, start_x:end_x, channel:channel + 1]
+        print(f"The shape of image is: {square.shape} or {square.shape[:2]}")
         print(square)
+
         turned = transpose_image(square)
         print(f"New shape after Transpose: {turned.shape}")
         print(turned)
+
         plt.imshow(turned, cmap="gray")
-        plt.title("Transpose")
-        plt.xlabel("X axis (pixels)")
-        plt.ylabel("Y axis (pixels)")
-        plt.show()
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format="png", bbox_inches="tight")
+        plt.close()
+        buffer.seek(0)
+        Image.open(buffer).show()
+    except Exception as error:
+        print(f"Error: {error}")
+
+
+def main() -> None:
+    """Example: crop the same face window as zoom.py, then transpose it."""
+    try:
+        rotate("animal.jpeg", 100, 550, 400, 400, 0)
     except Exception as error:
         print(f"Error: {error}")
 
